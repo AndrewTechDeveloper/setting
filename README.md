@@ -1,16 +1,11 @@
-## zsh cusomize
+## Using
 ```
-install iterm2(theme solarized)
-install prezto
-```
-### in zpreztoc
-```
-zstyle ':prezto:module:prompt' theme 'agnoster'
+iterm2
+prezto(theme agnoster)
+plugin(vim plugin manager)
 ```
 
-## syntax-highlight install
+### plugin install
 ```
-cd  vim-colors-solarized
-mkdir -p ~/.vim/colors/
-cp vim-colors-solarized/colors/solarized.vim ~/.vim/colors/
+:PlugInstall
 ```
