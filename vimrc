@@ -10,6 +10,7 @@ Plug 'Shougo/deoplete.nvim'
 Plug 'sheerun/vim-polyglot'
 Plug 'jiangmiao/auto-pairs'
 Plug 'SirVer/ultisnips'
+Plug 'nathanaelkane/vim-indent-guides'
 call plug#end()
 
 "PlugIn shortcut
@@ -27,11 +28,25 @@ nnoremap <silent> [fugitive]c :Gcommit-v<CR>
 nnoremap <silent> [fugitive]b :Gblame<CR>
 nnoremap <silent> [fugitive]d :Gdiff<CR>
 nnoremap <silent> [fugitive]m :Gmerge<CR>
+"vim-indent-guides
+let g:indent_guides_enable_on_vim_startup = 1
+"vim-ale
+let g:ale_lint_on_text_changed = 0
+let g:ale_sign_error = ''
+let g:ale_sign_warning = ''
+let g:airline#extensions#ale#open_lnum_symbol = '('
+let g:airline#extensions#ale#close_lnum_symbol = ')'
+let g:ale_echo_msg_format = '[%linter%]%code: %%s'
+highlight link ALEErrorSign Tag
+highlight link ALEWarningSign StorageClass
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " color syntax
 syntax enable
 set background=dark
 colorscheme solarized
+
 " setting
 "文字コードをUFT-8に設定
 set fenc=utf-8
@@ -179,20 +194,6 @@ augroup source-vimrc
   autocmd BufWritePost *gvimrc if has('gui_running') source $MYGVIMRC
 augroup END
 
-" auto comment off
-augroup auto_comment_off
-  autocmd!
-  autocmd BufEnter * setlocal formatoptions-=r
-  autocmd BufEnter * setlocal formatoptions-=o
-augroup END
-
-" HTML/XML閉じタグ自動補完
-augroup MyXML
-  autocmd!
-  autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
-  autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
-augroup END
-
 " 編集箇所のカーソルを記憶
 if has("autocmd")
   augroup redhat
@@ -205,9 +206,6 @@ if has("autocmd")
     \ endif
   augroup END
 endif
-
-
-
 
 nnoremap s <Nop>
 nnoremap sj <C-w>j
@@ -236,33 +234,6 @@ nnoremap sQ :<C-u>bd<CR>
 nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
 nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
 
-" Anywhere SID.
-function! s:SID_PREFIX()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
-endfunction
-
-" Set tabline.
-function! s:my_tabline()  "{{{
-  let s = ''
-  for i in range(1, tabpagenr('$'))
-    let bufnrs = tabpagebuflist(i)
-    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
-    let no = i  " display 0-origin tabpagenr.
-    let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
-    let title = fnamemodify(bufname(bufnr), ':t')
-    let title = '[' . title . ']'
-    let s .= '%'.i.'T'
-    let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
-    let s .= no . ':' . title
-    let s .= mod
-    let s .= '%#TabLineFill# '
-  endfor
-  let s .= '%#TabLineFill#%T%=%#TabLine#'
-  return s
-endfunction "}}}
-let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
-set showtabline=2 " 常にタブラインを表示
-
 " The prefix key.
 nnoremap    [Tag]   <Nop>
 nmap    t [Tag]
@@ -290,93 +261,6 @@ nnoremap <silent><C-e> :NERDTreeToggle<CR>
 set showmatch " 括弧の対応関係を一瞬表示する
 source $VIMRUNTIME/macros/matchit.vim " Vimの「%」を拡張する
 
-highlight Pmenu ctermbg=4
-highlight PmenuSel ctermbg=1
-highlight PMenuSbar ctermbg=4
-if !exists('g:neocomplete#keyword_patterns')
-        let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-
 autocmd QuickFixCmdPost *grep* cwindow
 
-"""""""""""""""""""""""""
-"      インデント
-""""""""""""""""""""""""
-set autoindent          "改行時に前の行のインデントを計測
-set smartindent         "改行時に入力された行の末尾に合わせて次の行のインデントを増減する
-set cindent             "Cプログラムファイルの自動インデントを始める
-set smarttab            "新しい行を作った時に高度な自動インデントを行う
-set expandtab           "タブ入力を複数の空白に置き換える
-
-set tabstop=2           "タブを含むファイルを開いた際, タブを何文字の空白に変換するか
-set shiftwidth=2        "自動インデントで入る空白数
-set softtabstop=0       "キーボードから入るタブの数
-
-"------------------------------------
-" sass
-"------------------------------------
-""{{{
-let g:sass_compile_auto = 1
-let g:sass_compile_cdloop = 5
-let g:sass_compile_cssdir = ['css', 'stylesheet']
-let g:sass_compile_file = ['scss', 'sass']
-let g:sass_started_dirs = []
-
-autocmd FileType less,sass  setlocal sw=2 sts=2 ts=2 et
-au! BufWritePost * SassCompile
-"}}}
-
-
-" リロード後に戻ってくるアプリ 変更してください
-let g:returnApp = "iTerm"
-nmap <Space>bc :ChromeReloadStart<CR>
-nmap <Space>bC :ChromeReloadStop<CR>
-nmap <Space>bf :FirefoxReloadStart<CR>
-nmap <Space>bF :FirefoxReloadStop<CR>
-nmap <Space>bs :SafariReloadStart<CR>
-nmap <Space>bS :SafariReloadStop<CR>
-nmap <Space>bo :OperaReloadStart<CR>
-nmap <Space>bO :OperaReloadStop<CR>
-nmap <Space>ba :AllBrowserReloadStart<CR>
-nmap <Space>bA :AllBrowserReloadStop<CR>
-
-set noswapfile
-
-"------------------------------------
-"linter
-"-----------------------------------
-" 保存時のみ実行する
-let g:ale_lint_on_text_changed = 0
-" 表示に関する設定
-let g:ale_sign_error = ''
-let g:ale_sign_warning = ''
-let g:airline#extensions#ale#open_lnum_symbol = '('
-let g:airline#extensions#ale#close_lnum_symbol = ')'
-let g:ale_echo_msg_format = '[%linter%]%code: %%s'
-highlight link ALEErrorSign Tag
-highlight link ALEWarningSign StorageClass
-" Ctrl + kで次の指摘へ、Ctrl + jで前の指摘へ移動
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
