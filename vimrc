@@ -1,38 +1,37 @@
-if !&compatible
-  set nocompatible
-endif
+" PlugIn
+call plug#begin()
+Plug 'terryma/vim-multiple-cursors'
+Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'w0rp/ale'
+Plug 'Shougo/deoplete.nvim'
+Plug 'sheerun/vim-polyglot'
+Plug 'jiangmiao/auto-pairs'
+Plug 'SirVer/ultisnips'
+call plug#end()
 
-" reset augroup
-augroup MyAutoCmd
-  autocmd!
-augroup END
-
-" dein自体の自動インストール
-let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.cache') : $XDG_CACHE_HOME
-let s:dein_dir = s:cache_home . '/dein'
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-if !isdirectory(s:dein_repo_dir)
-  call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
-endif
-let &runtimepath = s:dein_repo_dir .",". &runtimepath
-" プラグイン読み込み＆キャッシュ作成
-let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/dein.toml'
-if dein#load_state(s:dein_dir)
-  call dein#begin(s:dein_dir)
-  call dein#load_toml(s:toml_file)
-  call dein#end()
-  call dein#save_state()
-endif
-" 不足プラグインの自動インストール
-if has('vim_starting') && dein#check_install()
-  call dein#install()
-endif
+"PlugIn shortcut
+"NerdTree
+let NERDTreeShowHidden = 1
+nnoremap <silent><C-e> :NERDTreeFocusToggle<CR>
+let g:nerdtree_tabs_open_on_console_startup=1
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"git-fugitive
+nnoremap [fugitive]  <Nop>
+nmap <space>g [fugitive]
+nnoremap <silent> [fugitive]s :Gstatus<CR><C-w>T
+nnoremap <silent> [fugitive]a :Gwrite<CR>
+nnoremap <silent> [fugitive]c :Gcommit-v<CR>
+nnoremap <silent> [fugitive]b :Gblame<CR>
+nnoremap <silent> [fugitive]d :Gdiff<CR>
+nnoremap <silent> [fugitive]m :Gmerge<CR>
 
 " color syntax
 syntax enable
 set background=dark
 colorscheme solarized
-
 " setting
 "文字コードをUFT-8に設定
 set fenc=utf-8
