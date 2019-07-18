@@ -11,6 +11,15 @@ Plug 'sheerun/vim-polyglot'
 Plug 'jiangmiao/auto-pairs'
 Plug 'SirVer/ultisnips'
 Plug 'nathanaelkane/vim-indent-guides'
+Plug 'yonchu/accelerated-smooth-scroll'
+Plug 'vim-scripts/AnsiEsc.vim'
+Plug 'tpope/vim-endwise'
+Plug 'tomtom/tcomment_vim'
+Plug 'tpope/vim-surround'
+Plug 'tomasr/molokai'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'Shougo/neocomplete.vim'
 call plug#end()
 
 "PlugIn shortcut
@@ -32,15 +41,34 @@ nnoremap <silent> [fugitive]m :Gmerge<CR>
 let g:indent_guides_enable_on_vim_startup = 1
 "vim-ale
 let g:ale_lint_on_text_changed = 0
-let g:ale_sign_error = ''
-let g:ale_sign_warning = ''
-let g:airline#extensions#ale#open_lnum_symbol = '('
-let g:airline#extensions#ale#close_lnum_symbol = ')'
-let g:ale_echo_msg_format = '[%linter%]%code: %%s'
-highlight link ALEErrorSign Tag
-highlight link ALEWarningSign StorageClass
+let g:ale_linters = {
+\   'python': ['flake8', 'mypy'],
+\   'javascript': ['eslint'],
+\}
+let g:ale_fixers = {
+\   'ruby': ['rubocop'],
+\}
+let g:ale_sign_error = '!!'
+let g:ale_sign_warning = '=='
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let b:ale_warn_about_trailing_whitespace = 0
+let g:ale_sign_column_always = 1
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+"neo-complete
+"Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" vim-grep-quickFix
+nnoremap [q :cprevious<CR>   " 前へ
+nnoremap ]q :cnext<CR>       " 次へ
+nnoremap [Q :<C-u>cfirst<CR> " 最初へ
+nnoremap ]Q :<C-u>clast<CR>  " 最後へ"
+
 
 " color syntax
 syntax enable
@@ -262,5 +290,3 @@ set showmatch " 括弧の対応関係を一瞬表示する
 source $VIMRUNTIME/macros/matchit.vim " Vimの「%」を拡張する
 
 autocmd QuickFixCmdPost *grep* cwindow
-
-
