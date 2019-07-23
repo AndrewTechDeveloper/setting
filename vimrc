@@ -20,6 +20,7 @@ Plug 'tomasr/molokai'
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neocomplete.vim'
+Plug 'tyru/caw.vim'
 call plug#end()
 
 "PlugIn shortcut
@@ -58,6 +59,9 @@ let b:ale_warn_about_trailing_whitespace = 0
 let g:ale_sign_column_always = 1
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_enter = 0
 "neo-complete
 "Use neocomplete.
 let g:neocomplete#enable_at_startup = 1
@@ -68,7 +72,9 @@ nnoremap [q :cprevious<CR>   " 前へ
 nnoremap ]q :cnext<CR>       " 次へ
 nnoremap [Q :<C-u>cfirst<CR> " 最初へ
 nnoremap ]Q :<C-u>clast<CR>  " 最後へ"
-
+" caw.vim(comment out)
+nmap <C-K> <Plug>(caw:i:toggle)
+vmap <C-K> <Plug>(caw:i:toggle)
 
 " color syntax
 syntax enable
