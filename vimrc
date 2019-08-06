@@ -5,7 +5,6 @@ Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-Plug 'w0rp/ale'
 Plug 'Shougo/deoplete.nvim'
 Plug 'sheerun/vim-polyglot'
 Plug 'jiangmiao/auto-pairs'
@@ -40,28 +39,7 @@ nnoremap <silent> [fugitive]d :Gdiff<CR>
 nnoremap <silent> [fugitive]m :Gmerge<CR>
 "vim-indent-guides
 let g:indent_guides_enable_on_vim_startup = 1
-"vim-ale
-let g:ale_lint_on_text_changed = 0
-let g:ale_linters = {
-\   'python': ['flake8', 'mypy'],
-\   'javascript': ['eslint'],
-\}
-let g:ale_fixers = {
-\   'ruby': ['rubocop'],
-\}
-let g:ale_sign_error = '!!'
-let g:ale_sign_warning = '=='
-let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let b:ale_warn_about_trailing_whitespace = 0
-let g:ale_sign_column_always = 1
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 0
-let g:ale_lint_on_enter = 0
+
 "neo-complete
 "Use neocomplete.
 let g:neocomplete#enable_at_startup = 1
