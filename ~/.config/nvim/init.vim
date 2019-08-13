@@ -1,4 +1,3 @@
-" PlugIn
 call plug#begin()
 Plug 'terryma/vim-multiple-cursors'
 Plug 'scrooloose/nerdtree'
@@ -34,12 +33,6 @@ call plug#end()
 let NERDTreeShowHidden = 1
 nnoremap <silent><C-e> :NERDTreeFocusToggle<CR>
 let g:nerdtree_tabs_open_on_console_startup=1
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-let g:NERDTreeDirArrows = 1
-let g:NERDTreeDirArrowExpandable  = '▶'
-let g:NERDTreeDirArrowCollapsible = '▼'
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 "git-fugitive
 nnoremap [fugitive]  <Nop>
 nmap <space>g [fugitive]
@@ -222,13 +215,6 @@ set whichwrap=b,s,h,l,<,>,[,],~
 " バッファスクロール
 set mouse=a
 
-" auto reload .vimrc
-augroup source-vimrc
-  autocmd!
-  autocmd BufWritePost *vimrc source $MYVIMRC | set foldmethod=marker
-  autocmd BufWritePost *gvimrc if has('gui_running') source $MYGVIMRC
-augroup END
-
 " 編集箇所のカーソルを記憶
 if has("autocmd")
   augroup redhat
@@ -311,5 +297,4 @@ nnoremap [winsize]j :resize +3<CR>
 nnoremap [winsize]h :vertical resize +10<CR>
 nnoremap [winsize]l :vertical resize -10<CR>
 autocmd QuickFixCmdPost *grep* cwindow
-
 
