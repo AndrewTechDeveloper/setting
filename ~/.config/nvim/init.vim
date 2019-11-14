@@ -1,22 +1,18 @@
 call plug#begin()
 Plug 'terryma/vim-multiple-cursors'
-Plug 'scrooloose/nerdtree'
-Plug 'jistr/vim-nerdtree-tabs'
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
+Plug 'mkitt/tabline.vim'
+Plug 'nathanaelkane/vim-indent-guides'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'sheerun/vim-polyglot'
 Plug 'jiangmiao/auto-pairs'
 Plug 'SirVer/ultisnips'
-Plug 'nathanaelkane/vim-indent-guides'
 Plug 'yonchu/accelerated-smooth-scroll'
 Plug 'vim-scripts/AnsiEsc.vim'
 Plug 'tpope/vim-endwise'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-surround'
-Plug 'tomasr/molokai'
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/unite.vim'
@@ -29,6 +25,7 @@ Plug 'ujihisa/neco-look'
 call plug#end()
 
 "PlugIn shortcut
+"tabline
 "NerdTree
 let NERDTreeShowHidden = 1
 nnoremap <silent><C-e> :NERDTreeFocusToggle<CR>
@@ -42,11 +39,11 @@ nnoremap <silent> [fugitive]c :Gcommit-v<CR>
 nnoremap <silent> [fugitive]b :Gblame<CR>
 nnoremap <silent> [fugitive]d :Gdiff<CR>
 nnoremap <silent> [fugitive]m :Gmerge<CR>
-"vim-indent-guides
-let g:indent_guides_enable_on_vim_startup = 1
 "deo-complete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
+"indent-guides
+let g:indent_guides_enable_on_vim_startup = 1
 " vim-grep-quickFix
 nnoremap [q :cprevious<CR>   " 前へ
 nnoremap ]q :cnext<CR>       " 次へ
@@ -61,12 +58,12 @@ autocmd FileType html,css,scss,rb imap <buffer><expr><tab>
   \ "\<tab>"
 "multi-cursor
 function! Multiple_cursors_before()
-  if exists(':NeoCompleteLock')==2
+  if exists(':DeopleteLock')==2
     exe 'DeopleteLock'
   endif
 endfunction
 function! Multiple_cursors_after()
-  if exists(':NeoCompleteUnlock')==2
+  if exists(':DeopleteUnlock')==2
     exe 'DeopleteUnlock'
   endif
 endfunction" color syntax
@@ -105,6 +102,8 @@ set wildmode=list:longest
 " 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk
+
+autocmd InsertLeave * set nopaste
 
 " 検索系
 " 検索文字列が小文字の場合は大文字小文字を区別なく検索する
@@ -282,6 +281,8 @@ nnoremap <silent><C-e> :NERDTreeToggle<CR>
 "move with hjkl when insert-mode
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
 nnoremap O :<C-u>call append(expand('.'), '')<Cr>j
 set showmatch " 括弧の対応関係を一瞬表示する
 source $VIMRUNTIME/macros/matchit.vim " Vimの「%」を拡張する
@@ -298,3 +299,12 @@ nnoremap [winsize]h :vertical resize +10<CR>
 nnoremap [winsize]l :vertical resize -10<CR>
 autocmd QuickFixCmdPost *grep* cwindow
 
+augroup MyXML
+  autocmd!
+  autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype eruby inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype vue inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype javascript inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype typescript inoremap <buffer> </ </<C-x><C-o>
+augroup END
