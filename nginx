@@ -1,14 +1,14 @@
 upstream app_server {
-  server unix:///home/ec2-user/apps/andrew-tech/tmp/sockets/puma.sock fail_timeout=0;
+  server unix:///home/ec2-user/apps/***/tmp/sockets/puma.sock fail_timeout=0;
 }
 
 server {
   listen 80;
-  server_name andrew-tech.work;
-  root /home/ec2-user/apps/andrew-tech/frontend/build;
+  server_name ***;
+  root /home/ec2-user/apps/***/frontend/build;
   keepalive_timeout 5;
-  error_log  /home/ec2-user/apps/andrew-tech/log/nginx.error.log;
-  access_log /home/ec2-user/apps/andrew-tech/log/nginx.access.log;
+  error_log  /home/ec2-user/apps/***/log/nginx.error.log;
+  access_log /home/ec2-user/apps/***/log/nginx.access.log;
   client_max_body_size 2G;
   proxy_set_header X-Forwarded-Proto $scheme;
   if ( $http_x_forwarded_proto != 'https' ) {
@@ -18,7 +18,7 @@ server {
     try_files $uri /index.html =404;
   }
   location /api {
-    root /home/ec2-user/apps/andrew-tech/public;
+    root /home/ec2-user/apps/***/public;
     proxy_pass http://app_server;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
@@ -27,5 +27,5 @@ server {
 }
 server {
   listen 443;
-  server_name andrew-tech.work;
+  server_name ***;
 }
