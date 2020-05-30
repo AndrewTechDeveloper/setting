@@ -25,7 +25,6 @@ bind -r L resize-pane -R 5
 
 setw -g mouse on
 set -g default-terminal "screen-256color"
-set-option -g status-style bg=white,fg=black
 set-option -g status-style bright,dim
 setw -g window-status-current-style bright
 setw -g window-status-current-style reverse
