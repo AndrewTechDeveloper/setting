@@ -20,7 +20,9 @@ colors ~/.config/nvim/colors/
 
 ### zshrc
 ```
-rm -f ~/.zcompdump; compinit
-autoload -Uz compinit
-compinit -u
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+fpath=(path/to/zsh-completions/src $fpath)
+
 ```
