@@ -1,10 +1,11 @@
-call plug#begin()
+call plug#begin('~/.config/nvim')
 Plug 'terryma/vim-multiple-cursors'
 Plug 'mkitt/tabline.vim'
 Plug 'b4b4r07/vim-shellutils'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'roxma/nvim-yarp'
+Plug 'vim-python/python-syntax'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'sheerun/vim-polyglot'
 Plug 'jiangmiao/auto-pairs'
@@ -23,6 +24,8 @@ Plug 'tpope/vim-rails'
 Plug 'Shougo/neco-vim'
 Plug 'Shougo/neco-syntax'
 Plug 'ujihisa/neco-look'
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'thosakwe/vim-flutter'
 call plug#end()
 
 hi TabLine      ctermfg=Black  ctermbg=Green     cterm=NONE
@@ -37,27 +40,14 @@ nnoremap <silent> [fugitive]b :Gblame<CR>
 nnoremap <silent> [fugitive]d :Gdiff<CR>
 nnoremap <silent> [fugitive]m :Gmerge<CR>
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
 let g:indent_guides_enable_on_vim_startup = 1
+let g:python_highlight_all = 1
 nnoremap [q :cprevious<CR>   " 前へ
 nnoremap ]q :cnext<CR>       " 次へ
 nnoremap [Q :<C-u>cfirst<CR> " 最初へ
 nnoremap ]Q :<C-u>clast<CR>  " 最後へ"
 nmap <C-K> <Plug>(caw:i:toggle)
 vmap <C-K> <Plug>(caw:i:toggle)
-autocmd FileType html,css,scss,rb imap <buffer><expr><tab>
-  \ emmet#isExpandable() ? "\<plug>(emmet-expand-abbr)" :
-  \ "\<tab>"
-function! Multiple_cursors_before()
-  if exists(':DeopleteLock')==2
-    exe 'DeopleteLock'
-  endif
-endfunction
-function! Multiple_cursors_after()
-  if exists(':DeopleteUnlock')==2
-    exe 'DeopleteUnlock'
-  endif
-endfunction" color syntax
 
 syntax enable
 set background=dark
@@ -133,16 +123,6 @@ set nrformats=
 set whichwrap=b,s,h,l,<,>,[,],~
 set mouse=a
 
-if has("autocmd")
-  augroup redhat
-    autocmd BufRead *.txt set tw=78
-    autocmd BufReadPost *
-    \ if line("'\"") > 0 && line ("'\"") <= line("$") |
-    \   exe "normal! g'\"" |
-    \ endif
-  augroup END
-endif
-
 nnoremap s <Nop>
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
@@ -167,8 +147,6 @@ nnoremap ss :<C-u>sp<CR>
 nnoremap sv :<C-u>vs<CR>
 nnoremap sq :<C-u>q<CR>
 nnoremap sQ :<C-u>bd<CR>
-nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
-nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
 
 nnoremap    [Tag]   <Nop>
 nmap    t [Tag]
@@ -195,8 +173,6 @@ source $VIMRUNTIME/macros/matchit.vim
 
 set foldmethod=indent
 set foldcolumn=3
-au BufWinLeave * mkview
-au BufWinEnter * silent loadview
 nnoremap [winsize] <Nop>
 nmap <C-E> [winsize]
 nnoremap [winsize]k :resize -3<CR>
@@ -204,13 +180,3 @@ nnoremap [winsize]j :resize +3<CR>
 nnoremap [winsize]h :vertical resize +10<CR>
 nnoremap [winsize]l :vertical resize -10<CR>
 autocmd QuickFixCmdPost *grep* cwindow
-
-augroup MyXML
-  autocmd!
-  autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
-  autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
-  autocmd Filetype eruby inoremap <buffer> </ </<C-x><C-o>
-  autocmd Filetype vue inoremap <buffer> </ </<C-x><C-o>
-  autocmd Filetype javascript inoremap <buffer> </ </<C-x><C-o>
-  autocmd Filetype typescript inoremap <buffer> </ </<C-x><C-o>
-augroup END
